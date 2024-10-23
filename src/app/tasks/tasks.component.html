@@ -1,10 +1,39 @@
-<p>tasks works!</p>
-
 @if (tasks$ | async; as tasks) {
-  @for (task of tasks; track task.id) {
-    <p>Name: {{ task.name }}</p>
-    <p>Status: {{ task.status }}</p>
-  }
+  <div class="container">
+    <div class="example-container">
+      <h2>To do</h2>
+
+      <div
+        cdkDropList
+        #todoList="cdkDropList"
+        [cdkDropListData]="tasks.todo"
+        [cdkDropListConnectedTo]="[doneList]"
+        class="example-list"
+        (cdkDropListDropped)="dropTask($event)">
+        @for (item of tasks.todo; track item.id) {
+          <div class="example-box" cdkDrag>{{item.name}}</div>
+        }
+      </div>
+    </div>
+
+    <div class="example-container">
+      <h2>Done</h2>
+
+      <div
+        cdkDropList
+        #doneList="cdkDropList"
+        [cdkDropListData]="tasks.done"
+        [cdkDropListConnectedTo]="[todoList]"
+        class="example-list"
+        (cdkDropListDropped)="dropTask($event)">
+        @for (item of tasks.done; track item.id) {
+          <div class="example-box" cdkDrag>{{item.name}}</div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <button (click)="addTask()">Add task</button>
 }
 @else {
   <p>Loading...</p>
